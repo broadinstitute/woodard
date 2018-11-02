@@ -1,0 +1,5 @@
+{
+  "modelPackage": "woodard.model",
+  "apiPackage": "woodard.api",
+  "sourceFolder": "woodard/generated"
+}
