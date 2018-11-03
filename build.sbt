@@ -1,6 +1,6 @@
 version := "1.0.0"
-name := "swagger-scala-client"
-organization := "io.swagger"
+name := "woodard"
+organization := "Broad Institute"
 scalaVersion := "2.11.12"
 
 libraryDependencies ++= Seq(
