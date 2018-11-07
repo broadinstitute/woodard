@@ -14,6 +14,7 @@ case class ServerApi(uri: Uri, version: String = "v1") {
     Accept(`application/json`)
   )
 
+  def getWorkflowApi(id: String): ServerWorkflowApi = ServerWorkflowApi(this, id)
 
 }
 

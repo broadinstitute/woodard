@@ -15,12 +15,15 @@ class CromiamSubmitTest extends FunSuite {
     request.putHeaders(authorization(token))
   }
 
+  def getBearerToken: String = "open sesame"
+
   test("Try to submit to CromIam server") {
     val client = Http1Client[IO]().unsafeRunSync()
-    val requestIO = ServerApi.caasProd.getVersion
+    val workflowId = "35a817e4-52ca-4e3c-85f0-b4111a9ca3ae"
+    val requestIO = ServerApi.caasProd.getWorkflowApi(workflowId).getMetadata
     println(requestIO.map(_.uri.renderString).unsafeRunSync())
-    val token = "open sesame"
-    val stringIO = client.expect[String](requestIO.map(authorize(_, token)))
+    val bearerToken = getBearerToken
+    val stringIO = client.expect[String](requestIO.map(authorize(_, bearerToken)))
     val string = stringIO.unsafeRunSync()
     println("yo!")
     println(string)
