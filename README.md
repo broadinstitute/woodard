@@ -1,5 +1,5 @@
 # woodard
-A Scala client for the Cromwell server. This is very much work in progress.
+Working on creating a Scala client for the Cromwell server.
 
 Feel free to submit pull requests.
 
