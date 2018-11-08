@@ -3,7 +3,8 @@
 val scalaV = "2.12.7"
 val scalatestVersion = "3.0.5"
 val http4sVersion = "0.18.21"
-val GoogleAuthHttpVersion = "0.10.0"
+val googleAuthHttpVersion = "0.10.0"
+val betterFilesV = "3.6.0"
 
 lazy val commonSettings = Seq(
   version := "0.0.1",
@@ -25,14 +26,15 @@ lazy val commonSettings = Seq(
   )
 )
 
-lazy val coreSettings = Seq(
+lazy val coreOnlySettings = Seq(
   name := "woodard-core"
 )
 
-lazy val cromiamSettings = Seq(
+lazy val cromiamOnlySettings = Seq(
   name := "woodard-cromiam",
   libraryDependencies ++= Seq(
-    "com.google.auth" % "google-auth-library-oauth2-http" % GoogleAuthHttpVersion
+    "com.google.auth" % "google-auth-library-oauth2-http" % googleAuthHttpVersion,
+    "com.github.pathikrit" %% "better-files" % betterFilesV
   )
 )
 
@@ -44,5 +46,5 @@ lazy val core = (project in file("core"))
 lazy val cromiam = (project in file("cromiam"))
   .dependsOn(core)
   .settings(commonSettings)
-  .settings(cromiamSettings)
+  .settings(cromiamOnlySettings)
   

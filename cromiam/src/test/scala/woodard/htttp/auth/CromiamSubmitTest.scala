@@ -1,4 +1,4 @@
-package woodard.cromiam
+package woodard.htttp.auth
 
 import cats.effect.IO
 import org.http4s.client.blaze.Http1Client
