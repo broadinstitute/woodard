@@ -6,6 +6,7 @@ import org.http4s.headers.Authorization
 import org.http4s.{AuthScheme, Credentials, Request}
 import org.scalatest.FunSuite
 import woodard.http.ServerApi
+import woodard.http.auth.GoogleCredentialsBox.Scope
 
 class CromiamSubmitTest extends FunSuite {
 
@@ -15,15 +16,23 @@ class CromiamSubmitTest extends FunSuite {
     request.putHeaders(authorization(token))
   }
 
-  def getBearerToken: String = "open sesame"
+  def getAccessTokenOpt: Option[String] = {
+    val serviceAccountFileOpt = ServiceAccountFile.serviceAccountFileOpt
+    val baseCredentials = GoogleCredentialsBox.getCredentials(serviceAccountFileOpt)
+    val credentials = baseCredentials.withScopes(Scope.email, Scope.openid, Scope.profile)
+    credentials.accessTokenOpt.map(_.getTokenValue)
+  }
 
   test("Try to submit to CromIam server") {
     val client = Http1Client[IO]().unsafeRunSync()
-    val workflowId = "35a817e4-52ca-4e3c-85f0-b4111a9ca3ae"
+    val workflowId = "9d9d51b5-a2d5-45e2-a2f5-40287fad1eb3"
     val requestIO = ServerApi.caasProd.getWorkflowApi(workflowId).getMetadata
     println(requestIO.map(_.uri.renderString).unsafeRunSync())
-    val bearerToken = getBearerToken
-    val stringIO = client.expect[String](requestIO.map(authorize(_, bearerToken)))
+    val accessTokenOpt = getAccessTokenOpt
+    if(accessTokenOpt.isEmpty) cancel("Could not get access token.")
+    val accessToken = accessTokenOpt.get
+    println(accessToken.toString)
+    val stringIO = client.expect[String](requestIO.map(authorize(_, accessToken)))
     val string = stringIO.unsafeRunSync()
     println("yo!")
     println(string)
