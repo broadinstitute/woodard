@@ -13,7 +13,7 @@ case class ServerWorkflowApi(serverApi: ServerApi, id: String) {
   val uri: Uri = serverApi.uri / "api" / "workflows" / version / id
 
   def getMetadata: IO[Request[IO]] = GET(
-    uri / "version",
+    uri / "metadata",
     Accept(`application/json`)
   )
 
