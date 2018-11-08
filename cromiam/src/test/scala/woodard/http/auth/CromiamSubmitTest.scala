@@ -1,4 +1,4 @@
-package woodard.htttp.auth
+package woodard.http.auth
 
 import cats.effect.IO
 import org.http4s.client.blaze.Http1Client

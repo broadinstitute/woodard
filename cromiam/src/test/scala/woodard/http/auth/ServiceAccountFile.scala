@@ -1,4 +1,4 @@
-package woodard.htttp.auth
+package woodard.http.auth
 
 import better.files.File
 
