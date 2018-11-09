@@ -22,6 +22,7 @@ lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
     "org.http4s" %% "http4s-blaze-client" % http4sVersion,
     "org.http4s" %% "http4s-circe" % http4sVersion,
+    "com.github.pathikrit" %% "better-files" % betterFilesV,
     "org.scalatest" %% "scalatest" % scalatestVersion % "test"
   )
 )
@@ -33,8 +34,7 @@ lazy val coreOnlySettings = Seq(
 lazy val cromiamOnlySettings = Seq(
   name := "woodard-cromiam",
   libraryDependencies ++= Seq(
-    "com.google.auth" % "google-auth-library-oauth2-http" % googleAuthHttpVersion,
-    "com.github.pathikrit" %% "better-files" % betterFilesV
+    "com.google.auth" % "google-auth-library-oauth2-http" % googleAuthHttpVersion
   )
 )
 

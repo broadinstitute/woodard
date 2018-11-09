@@ -5,8 +5,9 @@ import org.http4s.MediaType.`application/json`
 import org.http4s.Method.{GET, POST}
 import org.http4s.client.dsl.io._
 import org.http4s.headers.Accept
-import org.http4s.multipart.Multipart
+import org.http4s.multipart.{Multipart, Part}
 import org.http4s.{Request, Uri}
+import better.files.File
 
 case class ServerApi(uri: Uri, version: String = "v1") {
 
@@ -17,11 +18,19 @@ case class ServerApi(uri: Uri, version: String = "v1") {
 
   def getWorkflowApi(id: String): ServerWorkflowApi = ServerWorkflowApi(this, id)
 
-  def submit: IO[Request[IO]] = POST(
+  def submit(workflowSource: File, workflowInputs: File): IO[Request[IO]] = POST(
     uri / "api" / "workflows" / version,
-    Multipart(Vector(
-
-    ))
+    {
+      val versionPart = Part.formData("version", version)
+      val workflowSourcePart = Part.fileData("workflowSource", workflowSource.toJava)
+      val workflowInputsPart = Part.fileData("workflowInputs", workflowInputs.toJava)
+      val parts =  Vector(
+        versionPart,
+        workflowSourcePart,
+        workflowInputsPart
+      )
+      Multipart(parts)
+    }
   )
 
 }
