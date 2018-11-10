@@ -1,5 +1,6 @@
 package woodard.http
 
+import better.files.File
 import cats.effect.IO
 import org.http4s.MediaType.`application/json`
 import org.http4s.Method.{GET, POST}
@@ -7,7 +8,6 @@ import org.http4s.client.dsl.io._
 import org.http4s.headers.Accept
 import org.http4s.multipart.{Multipart, Part}
 import org.http4s.{Request, Uri}
-import better.files.File
 
 case class ServerApi(uri: Uri, version: String = "v1") {
 
@@ -21,9 +21,9 @@ case class ServerApi(uri: Uri, version: String = "v1") {
   def submit(workflowSource: File, workflowInputs: File): IO[Request[IO]] = POST(
     uri / "api" / "workflows" / version,
     {
-      val versionPart = Part.formData("version", version)
-      val workflowSourcePart = Part.fileData("workflowSource", workflowSource.toJava)
-      val workflowInputsPart = Part.fileData("workflowInputs", workflowInputs.toJava)
+      val versionPart: Part[IO] = Part.formData[IO]("version", version)
+      val workflowSourcePart: Part[IO] = Part.fileData[IO]("workflowSource", workflowSource.toJava)
+      val workflowInputsPart: Part[IO] = Part.fileData[IO]("workflowInputs", workflowInputs.toJava)
       val parts =  Vector(
         versionPart,
         workflowSourcePart,
