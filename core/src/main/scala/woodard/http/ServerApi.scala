@@ -35,7 +35,8 @@ case class ServerApi(uri: Uri, version: String = "v1") {
         workflowInputsPart
       )
       Multipart(parts)
-    }
+    },
+    `Content-Type`(MediaType.`multipart/form-data`)
   )
 
 }
