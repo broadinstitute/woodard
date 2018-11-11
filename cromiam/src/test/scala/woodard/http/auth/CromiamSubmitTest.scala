@@ -8,27 +8,6 @@ import woodard.http.auth.GoogleCredentialsBox.Scope
 
 class CromiamSubmitTest extends FunSuite {
 
-  private def getCredentials: GoogleCredentialsBox = {
-    val serviceAccountFileOpt = ServiceAccountFile.serviceAccountFileOpt
-    val baseCredentials = GoogleCredentialsBox.getCredentials(serviceAccountFileOpt)
-    baseCredentials.withScopes(Scope.all)
-  }
-
-  private val credentials = getCredentials
-
-  test("Metadata request to CromIam server") {
-    val client = Http1Client[IO]().unsafeRunSync()
-    val workflowId = "9d9d51b5-a2d5-45e2-a2f5-40287fad1eb3"
-    val requestIO = ServerApi.caasProd.getWorkflowApi(workflowId).getMetadata
-    println(requestIO.map(_.uri.renderString).unsafeRunSync())
-    val stringIO = client.expect[String](requestIO.map(credentials.addToRequestOpt(_).get))
-    val string = stringIO.unsafeRunSync()
-    client.shutdownNow()
-    println("yo!")
-    println(string)
-    println("wassup?")
-  }
-
   test("Workflow submission to CromIam server") {
     val client = Http1Client[IO]().unsafeRunSync()
     // TODO
