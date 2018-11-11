@@ -1,5 +1,8 @@
 package woodard.http.auth
 
+import cats.effect.IO
+import org.http4s.client.blaze.Http1Client
+import org.http4s.{EntityDecoder, Request}
 import woodard.http.auth.GoogleCredentialsBox.Scope
 
 /**
@@ -11,5 +14,17 @@ object CromiamTestUtils {
     val serviceAccountFileOpt = ServiceAccountFile.serviceAccountFileOpt
     val baseCredentials = GoogleCredentialsBox.getCredentials(serviceAccountFileOpt)
     baseCredentials.withScopes(Scope.all)
+  }
+
+  private[auth] val credentials = getCredentials
+
+  private[auth] def doRequest[R](requestIO: IO[Request[IO]]
+                                )(implicit entityDecoder: EntityDecoder[IO, R]): R = {
+    val client = Http1Client[IO]().unsafeRunSync()
+    val authorizedRequestIO = requestIO.map(credentials.addToRequestOpt(_).get)
+    val resultIO = client.expect[R](authorizedRequestIO)
+    val result = resultIO.unsafeRunSync()
+    client.shutdownNow()
+    result
   }
 }
