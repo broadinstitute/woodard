@@ -5,6 +5,7 @@ val scalatestVersion = "3.0.5"
 val http4sVersion = "0.18.21"
 val googleAuthHttpVersion = "0.10.0"
 val betterFilesV = "3.6.0"
+val logbackClassicV = "1.2.3"
 
 lazy val commonSettings = Seq(
   version := "0.0.1",
@@ -23,6 +24,7 @@ lazy val commonSettings = Seq(
     "org.http4s" %% "http4s-blaze-client" % http4sVersion,
     "org.http4s" %% "http4s-circe" % http4sVersion,
     "com.github.pathikrit" %% "better-files" % betterFilesV,
+    "ch.qos.logback" % "logback-classic" % logbackClassicV,
     "org.scalatest" %% "scalatest" % scalatestVersion % "test"
   )
 )
