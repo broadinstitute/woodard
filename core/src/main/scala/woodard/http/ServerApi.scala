@@ -19,7 +19,7 @@ case class ServerApi(uri: Uri, version: String = "v1") {
 
   def getWorkflowApi(id: String): ServerWorkflowApi = ServerWorkflowApi(this, id)
 
-  def submit(workflowSource: File, workflowInputs: File): IO[Request[IO]] = POST(
+  def submit(workflowSource: File, workflowInputs: File, workflowOptions: File): IO[Request[IO]] = POST(
     uri / "api" / "workflows" / version,
     {
       val versionPart: Part[IO] = Part.formData[IO]("version", version)
@@ -29,14 +29,19 @@ case class ServerApi(uri: Uri, version: String = "v1") {
       val workflowInputsPart: Part[IO] =
         Part.fileData[IO]("workflowInputs", workflowInputs.toJava,
           `Content-Type`(MediaType.`application/json`, Charset.`UTF-8`))
+      val workflowOptionsPart: Part[IO] =
+        Part.fileData[IO]("workflowOptions", workflowOptions.toJava,
+          `Content-Type`(MediaType.`application/json`, Charset.`UTF-8`))
       val parts =  Vector(
         versionPart,
         workflowSourcePart,
-        workflowInputsPart
+        workflowInputsPart,
+        workflowOptionsPart
       )
       Multipart(parts)
     },
-    `Content-Type`(MediaType.`multipart/form-data`)
+    `Content-Type`(MediaType.`multipart/form-data`),
+    Accept(MediaType.`application/json`)
   )
 
 }

@@ -13,7 +13,10 @@ class CromiamSubmitTest extends FunSuite {
     val workflowInputs: File =
       CromiamSubmitTestFiles.workflowInputsOpt.fold(
         cancel("No inputs file has been provided."))(identity)
-    val requestIO = ServerApi.caasProd.submit(workflowSource, workflowInputs)
+    val workflowOptions: File =
+      CromiamSubmitTestFiles.workflowOptionsOpt.fold(
+        cancel("No options file has been provided."))(identity)
+    val requestIO = ServerApi.caasProd.submit(workflowSource, workflowInputs, workflowOptions)
     println(requestIO.map(_.toString).unsafeRunSync())
     val result = CromiamTestUtils.doRequest[String](requestIO)
     println(result)
