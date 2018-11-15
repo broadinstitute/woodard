@@ -14,7 +14,7 @@ package woodard.model
 
 import java.util.Date
 
-case class CallMetadata (
+case class MetadataResponse(
   // Mapping of input fully qualified names to stringified values
   inputs: Any,
   // Status in Cromwell execution terms.

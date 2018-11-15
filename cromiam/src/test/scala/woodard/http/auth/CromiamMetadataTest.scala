@@ -1,7 +1,8 @@
 package woodard.http.auth
 
 import org.scalatest.FunSuite
-import woodard.http.ServerApi
+import woodard.http.ServerHttpRequests
+import woodard.model.MetadataRequest
 
 /**
   * woodard
@@ -11,9 +12,10 @@ class CromiamMetadataTest extends FunSuite {
 
   test("Metadata request to CromIam server") {
     val workflowId = "9d9d51b5-a2d5-45e2-a2f5-40287fad1eb3"
-    val server = ServerApi.caasProd
-    val requestIO = server.getWorkflowApi(workflowId).getMetadata
-    val string = CromiamTestUtils.doRequest[String](requestIO)
+    val server = ServerHttpRequests.caasProd
+    val request = MetadataRequest(workflowId)
+    val requestIO = server.getMetadata(request)
+    val string = CromiamTestUtils.doHttpRequest[String](requestIO)
     println(requestIO.map(_.uri.renderString).unsafeRunSync())
     println("yo!")
     println(string)

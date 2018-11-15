@@ -19,7 +19,7 @@ object CromiamTestUtils {
 
   private[auth] val credentials = getCredentials
 
-  private[auth] def doRequest[R](requestIO: IO[Request[IO]]
+  private[auth] def doHttpRequest[R](requestIO: IO[Request[IO]]
                                 )(implicit entityDecoder: EntityDecoder[IO, R]): R = {
     val client =
       ResponseLogger.apply0(logHeaders = true, logBody = true)(

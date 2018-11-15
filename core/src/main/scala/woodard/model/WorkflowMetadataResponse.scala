@@ -15,21 +15,21 @@ package woodard.model
 import java.util.Date
 
 case class WorkflowMetadataResponse (
-  // The identifier of the workflow
-  id: String,
-  // The status of the workflow
-  status: String,
-  // Submission datetime of the workflow in ISO8601 format with milliseconds
-  submission: Date,
-  // Start datetime of the workflow in ISO8601 format with milliseconds
-  start: Option[Date] = None,
-  // End datetime of the workflow in ISO8601 format with milliseconds
-  end: Option[Date] = None,
-  // Map of input keys to input values
-  inputs: Option[Any] = None,
-  // Map of output keys to output values
-  outputs: Option[Any] = None,
-  calls: Option[CallMetadata] = None,
-  failures: Option[FailureMessage] = None
+                                      // The identifier of the workflow
+                                      id: String,
+                                      // The status of the workflow
+                                      status: String,
+                                      // Submission datetime of the workflow in ISO8601 format with milliseconds
+                                      submission: Date,
+                                      // Start datetime of the workflow in ISO8601 format with milliseconds
+                                      start: Option[Date] = None,
+                                      // End datetime of the workflow in ISO8601 format with milliseconds
+                                      end: Option[Date] = None,
+                                      // Map of input keys to input values
+                                      inputs: Option[Any] = None,
+                                      // Map of output keys to output values
+                                      outputs: Option[Any] = None,
+                                      calls: Option[MetadataResponse] = None,
+                                      failures: Option[FailureMessage] = None
 )
 
