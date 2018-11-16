@@ -40,5 +40,5 @@ object CromiamTestUtils {
   }
 
   private[auth] def getServerApi(httpRequests: HttpRequests): ServerApi =
-    new ServerApi(httpRequests, getClient, authorized)
+    new ServerApi(httpRequests, getClient)
 }

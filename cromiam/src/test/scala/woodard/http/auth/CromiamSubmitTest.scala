@@ -14,7 +14,7 @@ class CromiamSubmitTest extends FunSuite {
     val cromwellServer = HttpRequests.caasProd
     import CromiamSubmitTestFiles.{workflowInputsOpt, workflowOptionsOpt, collectionNameOpt}
     val request = WorkflowSubmitRequest(workflowSource, workflowInputsOpt, workflowOptionsOpt, collectionNameOpt)
-    val httpRequestIO = cromwellServer.submit(request)
+    val httpRequestIO = cromwellServer.workflowSubmit(request)
     println(httpRequestIO.map(_.toString).unsafeRunSync())
     val result = CromiamTestUtils.doHttpRequest[String](httpRequestIO)
     println(result)

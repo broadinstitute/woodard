@@ -10,19 +10,21 @@ import org.http4s.multipart.{Multipart, Part}
 import org.http4s.{Charset, MediaType, Request, Uri}
 import woodard.model.{MetadataRequest, VersionRequest, WorkflowSubmitRequest}
 
-case class HttpRequests(uri: Uri) {
+case class HttpRequests(uri: Uri, requestMapper: Request[IO] => Request[IO] = identity) {
 
-  def getVersion(versionRequest: VersionRequest): IO[Request[IO]] = GET(
+  def map(requestMapper: Request[IO] => Request[IO]): HttpRequests = copy(requestMapper = requestMapper)
+
+  def version(versionRequest: VersionRequest): IO[Request[IO]] = GET(
     uri / "engine" / versionRequest.version / "version",
     Accept(`application/json`)
-  )
+  ).map(requestMapper)
 
-  def getMetadata(request: MetadataRequest): IO[Request[IO]] = GET(
+  def metadata(request: MetadataRequest): IO[Request[IO]] = GET(
     uri / "api" / "workflows" / request.version / request.id / "metadata",
     Accept(`application/json`)
-  )
+  ).map(requestMapper)
 
-  def submit(request: WorkflowSubmitRequest): IO[Request[IO]] = {
+  def workflowSubmit(request: WorkflowSubmitRequest): IO[Request[IO]] = {
     val urlToPart: Uri => Part[IO] = { url =>
       Part.formData[IO]("workflowUrl", url.renderString, `Content-Type`(MediaType.`text/plain`, Charset.`UTF-8`))
     }
@@ -55,7 +57,7 @@ case class HttpRequests(uri: Uri) {
       uri / "api" / "workflows" / request.version, multipart).map {
       _.withHeaders(multipart.headers)
         .putHeaders(`Accept`(MediaType.`application/json`))
-    }
+    }.map(requestMapper)
   }
 
 }

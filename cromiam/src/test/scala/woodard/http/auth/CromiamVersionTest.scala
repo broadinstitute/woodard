@@ -8,7 +8,7 @@ class CromiamVersionTest extends FunSuite {
 
   test("get version") {
     val request = VersionRequest()
-    val serverApi = CromiamTestUtils.getServerApi(HttpRequests.caasProd)
+    val serverApi = CromiamTestUtils.getServerApi(HttpRequests.caasProd.map(CromiamTestUtils.authorized))
     val response = serverApi.getVersion(request).unsafeRunSync()
     println(response)
   }
