@@ -10,7 +10,7 @@ import org.http4s.multipart.{Multipart, Part}
 import org.http4s.{Charset, MediaType, Request, Uri}
 import woodard.model.{MetadataRequest, VersionRequest, WorkflowSubmitRequest}
 
-case class ServerHttpRequests(uri: Uri) {
+case class HttpRequests(uri: Uri) {
 
   def getVersion(versionRequest: VersionRequest): IO[Request[IO]] = GET(
     uri / "engine" / versionRequest.version / "version",
@@ -60,8 +60,8 @@ case class ServerHttpRequests(uri: Uri) {
 
 }
 
-object ServerHttpRequests {
+object HttpRequests {
 
-  val caasProd: ServerHttpRequests = ServerHttpRequests(Uri.uri("https://cromwell.caas-prod.broadinstitute.org"))
-  val local: ServerHttpRequests = ServerHttpRequests(Uri.uri("http://localhost:8000"))
+  val caasProd: HttpRequests = HttpRequests(Uri.uri("https://cromwell.caas-prod.broadinstitute.org"))
+  val local: HttpRequests = HttpRequests(Uri.uri("http://localhost:8000"))
 }

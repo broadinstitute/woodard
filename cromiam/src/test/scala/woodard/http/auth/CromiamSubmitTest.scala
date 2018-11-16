@@ -2,7 +2,7 @@ package woodard.http.auth
 
 import better.files.File
 import org.scalatest.FunSuite
-import woodard.http.ServerHttpRequests
+import woodard.http.HttpRequests
 import woodard.model.WorkflowSubmitRequest
 
 class CromiamSubmitTest extends FunSuite {
@@ -11,7 +11,7 @@ class CromiamSubmitTest extends FunSuite {
     val workflowSource: File =
       CromiamSubmitTestFiles.workflowSourceOpt.fold(
         cancel("No workflow file has been provided."))(identity)
-    val cromwellServer = ServerHttpRequests.caasProd
+    val cromwellServer = HttpRequests.caasProd
     import CromiamSubmitTestFiles.{workflowInputsOpt, workflowOptionsOpt, collectionNameOpt}
     val request = WorkflowSubmitRequest(workflowSource, workflowInputsOpt, workflowOptionsOpt, collectionNameOpt)
     val httpRequestIO = cromwellServer.submit(request)
