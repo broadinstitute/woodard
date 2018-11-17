@@ -8,19 +8,14 @@ import org.http4s.client.dsl.io._
 import org.http4s.headers.{Accept, `Content-Type`}
 import org.http4s.multipart.{Multipart, Part}
 import org.http4s.{Charset, MediaType, Request, Uri}
-import woodard.model.{MetadataRequest, VersionRequest, WorkflowSubmitRequest}
+import woodard.model.{MetadataRequest, VersionRequest, WorkflowStatusRequest, WorkflowSubmitRequest}
 
 case class HttpRequests(uri: Uri, requestMapper: Request[IO] => Request[IO] = identity) {
 
   def map(requestMapper: Request[IO] => Request[IO]): HttpRequests = copy(requestMapper = requestMapper)
 
-  def version(versionRequest: VersionRequest): IO[Request[IO]] = GET(
+  def engineVersion(versionRequest: VersionRequest): IO[Request[IO]] = GET(
     uri / "engine" / versionRequest.version / "version",
-    Accept(`application/json`)
-  ).map(requestMapper)
-
-  def metadata(request: MetadataRequest): IO[Request[IO]] = GET(
-    uri / "api" / "workflows" / request.version / request.id / "metadata",
     Accept(`application/json`)
   ).map(requestMapper)
 
@@ -59,6 +54,16 @@ case class HttpRequests(uri: Uri, requestMapper: Request[IO] => Request[IO] = id
         .putHeaders(`Accept`(MediaType.`application/json`))
     }.map(requestMapper)
   }
+
+  def workflowMetadata(request: MetadataRequest): IO[Request[IO]] = GET(
+    uri / "api" / "workflows" / request.version / request.id / "metadata",
+    Accept(`application/json`)
+  ).map(requestMapper)
+
+  def workflowStatus(request: WorkflowStatusRequest): IO[Request[IO]] = GET(
+    uri / "api" / "workflows" / request.version / request.id / "status",
+    Accept(`application/json`)
+  ).map(requestMapper)
 
 }
 
