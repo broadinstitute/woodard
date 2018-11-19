@@ -3,7 +3,7 @@ package woodard.http
 import cats.effect.IO
 import org.http4s.client.Client
 import woodard.http.JsonDecoding.{versionResponseDecoder, workflowSubmitResponseDecoder}
-import woodard.http.JsonDecoding.workflowStatusResponseDecoder
+import woodard.http.JsonDecoding.{workflowMetadataResponseDecoder, workflowStatusResponseDecoder}
 import woodard.model._
 
 class ServerApi(val httpRequests: HttpRequests, client: Client[IO]) {
@@ -16,6 +16,11 @@ class ServerApi(val httpRequests: HttpRequests, client: Client[IO]) {
   def workflowSubmit(request: WorkflowSubmitRequest): IO[WorkflowSubmitResponse] = {
     val httpRequestIO = httpRequests.workflowSubmit(request)
     client.expect[WorkflowSubmitResponse](httpRequestIO)
+  }
+
+  def workflowMetadata(request: WorkflowMetadataRequest): IO[WorkflowMetadataResponse] = {
+    val httpRequestIO = httpRequests.workflowMetadata(request)
+    client.expect[WorkflowMetadataResponse](httpRequestIO)
   }
 
   def workflowStatus(request: WorkflowStatusRequest): IO[WorkflowStatusResponse] = {

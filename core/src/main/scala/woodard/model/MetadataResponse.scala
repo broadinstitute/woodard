@@ -16,7 +16,7 @@ import java.util.Date
 
 case class MetadataResponse(
   // Mapping of input fully qualified names to stringified values
-  inputs: Any,
+  inputs: Map[String, String],
   // Status in Cromwell execution terms.
   executionStatus: String,
   // The type of backend on which the call executed (e.g. JES, SGE, Local)
@@ -37,6 +37,6 @@ case class MetadataResponse(
   // Path to the standard error file for this call
   stderr: Option[String] = None,
   // Paths to backend specific logs for this call
-  backendLogs: Option[Any] = None
+  backendLogs: Option[Map[String, String]] = None
 )
 

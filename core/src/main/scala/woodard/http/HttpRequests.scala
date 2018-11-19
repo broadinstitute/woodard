@@ -8,7 +8,7 @@ import org.http4s.client.dsl.io._
 import org.http4s.headers.{Accept, `Content-Type`}
 import org.http4s.multipart.{Multipart, Part}
 import org.http4s.{Charset, MediaType, Request, Uri}
-import woodard.model.{MetadataRequest, VersionRequest, WorkflowStatusRequest, WorkflowSubmitRequest}
+import woodard.model.{WorkflowMetadataRequest, VersionRequest, WorkflowStatusRequest, WorkflowSubmitRequest}
 
 case class HttpRequests(uri: Uri, requestMapper: Request[IO] => Request[IO] = identity) {
 
@@ -55,7 +55,7 @@ case class HttpRequests(uri: Uri, requestMapper: Request[IO] => Request[IO] = id
     }.map(requestMapper)
   }
 
-  def workflowMetadata(request: MetadataRequest): IO[Request[IO]] = GET(
+  def workflowMetadata(request: WorkflowMetadataRequest): IO[Request[IO]] = GET(
     uri / "api" / "workflows" / request.version / request.id / "metadata",
     Accept(`application/json`)
   ).map(requestMapper)

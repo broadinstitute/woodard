@@ -26,10 +26,10 @@ case class WorkflowMetadataResponse (
                                       // End datetime of the workflow in ISO8601 format with milliseconds
                                       end: Option[Date] = None,
                                       // Map of input keys to input values
-                                      inputs: Option[Any] = None,
+                                      inputs: Option[Map[String, String]] = None,
                                       // Map of output keys to output values
-                                      outputs: Option[Any] = None,
-                                      calls: Option[MetadataResponse] = None,
+                                      outputs: Option[Map[String, String]] = None,
+                                      calls: Option[Map[String, Seq[MetadataResponse]]] = None,
                                       failures: Option[FailureMessage] = None
 )
 
