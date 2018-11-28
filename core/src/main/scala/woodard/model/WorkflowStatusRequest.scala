@@ -7,3 +7,7 @@ package woodard.model
 case class WorkflowStatusRequest(version: String, id: String) {
 
 }
+
+object WorkflowStatusRequest {
+  def apply(id: String): WorkflowStatusRequest = WorkflowStatusRequest(Common.apiDefaultVersion, id)
+}

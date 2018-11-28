@@ -20,6 +20,8 @@ class GoogleCredentialsBox(googleCredentials: GoogleCredentials) {
   def withScopes(scopes: Seq[Scope]): GoogleCredentialsBox =
     GoogleCredentialsBox(googleCredentials.createScoped(scopes.map(_.string).asJava))
 
+  def withAllScopes: GoogleCredentialsBox = withScopes(Scope.all)
+
   def accessTokenOpt: Option[AccessToken] = {
     Option(googleCredentials.getAccessToken).filter { token =>
       token.getExpirationTime.toInstant.isBefore(Instant.now.minusSeconds(1))
@@ -35,6 +37,8 @@ class GoogleCredentialsBox(googleCredentials: GoogleCredentials) {
       request.putHeaders(authorization)
     }
   }
+
+  def addToRequest(request: Request[IO]): Request[IO] = addToRequestOpt(request).get
 
 }
 

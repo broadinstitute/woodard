@@ -9,7 +9,7 @@ final case class WorkflowSubmitRequest(version: String, body: WorkflowSubmitRequ
 
 object WorkflowSubmitRequest {
 
-  def apply(body: Body): WorkflowSubmitRequest = WorkflowSubmitRequest("v1", body)
+  def apply(body: Body): WorkflowSubmitRequest = WorkflowSubmitRequest(Common.apiDefaultVersion, body)
 
   def apply(workflowSource: File, workflowInputs: Option[File], workflowOptions: Option[File],
             collectionName: Option[String]): WorkflowSubmitRequest =

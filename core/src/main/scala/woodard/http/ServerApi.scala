@@ -2,30 +2,28 @@ package woodard.http
 
 import cats.effect.IO
 import org.http4s.client.Client
-import woodard.http.JsonDecoding.{versionResponseDecoder, workflowSubmitResponseDecoder}
-import woodard.http.JsonDecoding.{workflowMetadataResponseDecoder, workflowStatusResponseDecoder}
-import woodard.model._
+import org.http4s.client.blaze.Http1Client
+import woodard.model.{EngineVersionRequest, VersionResponse, WorkflowMetadataRequest, WorkflowMetadataResponse, WorkflowStatusRequest, WorkflowStatusResponse, WorkflowSubmitRequest, WorkflowSubmitResponse}
 
-class ServerApi(val httpRequests: HttpRequests, client: Client[IO]) {
+class ServerApi(val serverApiIO: ServerApiIO) {
 
-  def engineVersion(request: VersionRequest): IO[VersionResponse] = {
-    val httpRequestIO = httpRequests.engineVersion(request)
-    client.expect[VersionResponse](httpRequestIO)
-  }
+  private def deIO[T](itemIO: IO[T]): T = itemIO.unsafeRunSync()
 
-  def workflowSubmit(request: WorkflowSubmitRequest): IO[WorkflowSubmitResponse] = {
-    val httpRequestIO = httpRequests.workflowSubmit(request)
-    client.expect[WorkflowSubmitResponse](httpRequestIO)
-  }
+  def engineVersion(request: EngineVersionRequest): VersionResponse =
+    deIO(serverApiIO.engineVersion(request))
 
-  def workflowMetadata(request: WorkflowMetadataRequest): IO[WorkflowMetadataResponse] = {
-    val httpRequestIO = httpRequests.workflowMetadata(request)
-    client.expect[WorkflowMetadataResponse](httpRequestIO)
-  }
+  def workflowSubmit(request: WorkflowSubmitRequest): WorkflowSubmitResponse =
+    deIO(serverApiIO.workflowSubmit(request))
 
-  def workflowStatus(request: WorkflowStatusRequest): IO[WorkflowStatusResponse] = {
-    val httpRequestIO = httpRequests.workflowStatus(request)
-    client.expect[WorkflowStatusResponse](httpRequestIO)
-  }
+  def workflowMetadata(request: WorkflowMetadataRequest): WorkflowMetadataResponse =
+    deIO(serverApiIO.workflowMetadata(request))
 
+  def workflowStatus(request: WorkflowStatusRequest): WorkflowStatusResponse =
+    deIO(serverApiIO.workflowStatus(request))
+
+}
+
+object ServerApi {
+  def apply(httpRequests: HttpRequests, client: Client[IO] = Http1Client[IO]().unsafeRunSync()): ServerApi =
+    new ServerApi(new ServerApiIO(httpRequests, client))
 }

@@ -5,7 +5,7 @@ import org.http4s.client.Client
 import org.http4s.client.blaze.Http1Client
 import org.http4s.client.middleware.{RequestLogger, ResponseLogger}
 import org.http4s.{EntityDecoder, Request}
-import woodard.http.{ServerApi, HttpRequests}
+import woodard.http.{ServerApiIO, HttpRequests}
 import woodard.http.auth.GoogleCredentialsBox.Scope
 
 /**
@@ -21,7 +21,7 @@ object CromiamTestUtils {
 
   private[auth] val credentials = getCredentials
 
-  private[auth] def authorized(request: Request[IO]): Request[IO] = credentials.addToRequestOpt(request).get
+  private[auth] def authorized(request: Request[IO]): Request[IO] = credentials.addToRequest(request)
 
   private[auth] def getClient: Client[IO] = ResponseLogger.apply0(logHeaders = true, logBody = true)(
     RequestLogger.apply0(logHeaders = true, logBody = true)(
@@ -39,6 +39,6 @@ object CromiamTestUtils {
     result
   }
 
-  private[auth] def getServerApi(httpRequests: HttpRequests): ServerApi =
-    new ServerApi(httpRequests, getClient)
+  private[auth] def getServerApi(httpRequests: HttpRequests): ServerApiIO =
+    new ServerApiIO(httpRequests, getClient)
 }

@@ -8,13 +8,13 @@ import org.http4s.client.dsl.io._
 import org.http4s.headers.{Accept, `Content-Type`}
 import org.http4s.multipart.{Multipart, Part}
 import org.http4s.{Charset, MediaType, Request, Uri}
-import woodard.model.{WorkflowMetadataRequest, VersionRequest, WorkflowStatusRequest, WorkflowSubmitRequest}
+import woodard.model.{WorkflowMetadataRequest, EngineVersionRequest, WorkflowStatusRequest, WorkflowSubmitRequest}
 
 case class HttpRequests(uri: Uri, requestMapper: Request[IO] => Request[IO] = identity) {
 
   def map(requestMapper: Request[IO] => Request[IO]): HttpRequests = copy(requestMapper = requestMapper)
 
-  def engineVersion(versionRequest: VersionRequest): IO[Request[IO]] = GET(
+  def engineVersion(versionRequest: EngineVersionRequest): IO[Request[IO]] = GET(
     uri / "engine" / versionRequest.version / "version",
     Accept(`application/json`)
   ).map(requestMapper)
