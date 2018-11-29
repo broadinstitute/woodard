@@ -1,6 +1,7 @@
 package woodard.http
 
 import cats.effect.IO
+import org.http4s.Request
 import org.http4s.client.Client
 import org.http4s.client.blaze.Http1Client
 import woodard.http.JsonDecoding.{versionResponseDecoder, workflowSubmitResponseDecoder}
@@ -8,6 +9,13 @@ import woodard.http.JsonDecoding.{workflowMetadataResponseDecoder, workflowStatu
 import woodard.model._
 
 class ServerApiIO(val httpRequests: HttpRequests, client: Client[IO]) {
+
+  def withHttpRequests(httpRequests: HttpRequests): ServerApiIO = new ServerApiIO(httpRequests, client)
+
+  def withClient(client: Client[IO]): ServerApiIO = new ServerApiIO(httpRequests, client)
+
+  def map(requestMapper: Request[IO] => Request[IO]): ServerApiIO =
+    withHttpRequests(httpRequests.map(requestMapper))
 
   def engineVersion(request: EngineVersionRequest): IO[VersionResponse] = {
     val httpRequestIO = httpRequests.engineVersion(request)

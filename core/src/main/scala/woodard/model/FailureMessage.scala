@@ -16,7 +16,7 @@ import java.util.Date
 
 case class FailureMessage (
   // The failure message
-  failure: String,
+  failure: Option[String],
   // The time at which this failure occurred
   timestamp: Date
 )
