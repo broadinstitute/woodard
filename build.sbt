@@ -1,5 +1,5 @@
 
-
+val woodardV = "0.1.0"
 val scalaV = "2.12.7"
 val scalatestV = "3.0.5"
 val http4sV = "0.18.21"
@@ -9,7 +9,7 @@ val logbackClassicV = "1.2.3"
 val circeV = "0.10.1"
 
 lazy val commonSettings = Seq(
-  version := "0.0.1",
+  version := woodardV,
   organization := "org.broadinstitute",
   scalaVersion := scalaV,
   resolvers ++= Seq(
