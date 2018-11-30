@@ -10,7 +10,7 @@ import woodard.model.{WorkflowMetadataRequest, WorkflowMetadataResponse, Workflo
 class WoodardShell(var serverApi: ServerApi) {
 
   var sourceFileOpt: Option[File] = None
-  var inputFileOpt: Option[File] = None
+  var inputsFileOpt: Option[File] = None
   var optionsFileOpt: Option[File] = None
   var collectionNameOpt: Option[String] = None
 
@@ -31,6 +31,8 @@ class WoodardShell(var serverApi: ServerApi) {
     }
   }
 
+  def httpRequests: HttpRequests = serverApi.serverApiIO.httpRequests
+
   def httpRequests_=(httpRequests: HttpRequests): Unit = {
     serverApi = serverApi.withHttpRequests(httpRequests)
   }
@@ -44,20 +46,28 @@ class WoodardShell(var serverApi: ServerApi) {
     }
   }
 
+  def source: File = sourceFileOpt.get
+
   def source_=(file: File): Unit = {
     checkFileExists(file)
     sourceFileOpt = Some(file)
   }
 
+  def inputs: File = inputsFileOpt.get
+
   def inputs_=(file: File): Unit = {
     checkFileExists(file)
-    inputFileOpt = Some(file)
+    inputsFileOpt = Some(file)
   }
+
+  def options: File = optionsFileOpt.get
 
   def options_=(file: File): Unit = {
     checkFileExists(file)
     optionsFileOpt = Some(file)
   }
+
+  def collectionName: String = collectionNameOpt.get
 
   def collectionName_=(name: String): Unit = {
     collectionNameOpt = Some(name)
@@ -67,11 +77,11 @@ class WoodardShell(var serverApi: ServerApi) {
 
   def submit(): Either[String, WorkflowSubmitResponse] = {
     sourceFileOpt.foreach(checkFileExists(_))
-    inputFileOpt.foreach(checkFileExists(_))
+    inputsFileOpt.foreach(checkFileExists(_))
     optionsFileOpt.foreach(checkFileExists(_, isOptional = true))
     sourceFileOpt match {
       case Some(sourceFile) =>
-        val request = WorkflowSubmitRequest(sourceFile, inputFileOpt, optionsFileOpt, collectionNameOpt)
+        val request = WorkflowSubmitRequest(sourceFile, inputsFileOpt, optionsFileOpt, collectionNameOpt)
         log(s"Submitting $request")
         val response = serverApi.workflowSubmit(request)
         lastWorkflowIdOpt = Some(response.id)
@@ -89,14 +99,14 @@ class WoodardShell(var serverApi: ServerApi) {
     }
   }
 
-  def status(idTemplate: String): Either[String, WorkflowStatusResponse] = {
+  def status(idTemplate: String = ""): Either[String, WorkflowStatusResponse] = {
     val id = getWorkflowId(idTemplate)
     val request = WorkflowStatusRequest(id)
     val response = serverApi.workflowStatus(request)
     Right(response)
   }
 
-  def metadata(idTemplate: String): Either[String, WorkflowMetadataResponse] = {
+  def metadata(idTemplate: String = ""): Either[String, WorkflowMetadataResponse] = {
     val id = getWorkflowId(idTemplate)
     val request = WorkflowMetadataRequest(id)
     val response = serverApi.workflowMetadata(request)
