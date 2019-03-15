@@ -117,6 +117,9 @@ class WoodardShell(var serverApi: ServerApi) {
 
 object WoodardShell {
 
+  val terraProd: WoodardShell = new WoodardShell(ServerApi(HttpRequests.terraProd))
+  val terraAlpha: WoodardShell = new WoodardShell(ServerApi(HttpRequests.terraAlpha))
+  val terraDev: WoodardShell = new WoodardShell(ServerApi(HttpRequests.terraDev))
   val caasProd: WoodardShell = new WoodardShell(ServerApi(HttpRequests.caasProd))
 
 }

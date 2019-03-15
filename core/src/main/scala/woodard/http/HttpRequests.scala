@@ -69,6 +69,11 @@ case class HttpRequests(uri: Uri, requestMapper: Request[IO] => Request[IO] = id
 
 object HttpRequests {
 
+  // https://cromwell.dsde-dev.broadinstitute.org
+
+  val terraProd: HttpRequests = HttpRequests(Uri.uri("https://cromwell.dsde-prod.broadinstitute.org"))
+  val terraAlpha: HttpRequests = HttpRequests(Uri.uri("https://cromwell.dsde-alpha.broadinstitute.org"))
+  val terraDev: HttpRequests = HttpRequests(Uri.uri("https://cromwell.dsde-dev.broadinstitute.org"))
   val caasProd: HttpRequests = HttpRequests(Uri.uri("https://cromwell.caas-prod.broadinstitute.org"))
   val local: HttpRequests = HttpRequests(Uri.uri("http://localhost:8000"))
 }

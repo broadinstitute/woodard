@@ -1,5 +1,5 @@
 
-val woodardV = "0.1.1"
+val woodardV = "0.1.2"
 val scalaV = "2.12.7"
 val scalatestV = "3.0.5"
 val http4sV = "0.18.21"
